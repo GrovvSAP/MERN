@@ -1,5 +1,6 @@
 const express = require('express')
-const cors = require('cors')
+const cors = require('cors');
+const mongoose = require('mongoose');
 const app = express();
 
 // Explicitly allow CORS for your frontend
@@ -9,6 +10,13 @@ app.use(cors({
     credentials: true,
 }));
 app.use(express.json());
+const MONGO_URI = "mongodb+srv://yanividov:Gi1DA1dfMMqqXCLg@cluster0.k9owp.mongodb.net/comments?retryWrites=true&w=majority&authSource=admin";
+
+mongoose.set('strictQuery', false); // Required for new MongoDB versions
+
+mongoose.connect(MONGO_URI)
+.then(() => console.log("✅ Connected to MongoDB Atlas"))
+.catch(err => console.error("❌ MongoDB connection error:", err));
 
 app.post('/register',(req,res)=>{
     const {username,password} = req.body;
