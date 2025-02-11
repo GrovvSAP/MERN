@@ -35,10 +35,25 @@ app.post('/register',async (req,res)=>{
     }catch(e){
         res.status(400).json(e);
     }
-
-
    // res.json({requestData:{username,password}});
 
+});
+
+
+app.post('/login', async (req, res) => {
+    const { username, password } = req.body;
+    const userDoc = await User.findOne({ username });
+
+    if (!userDoc) {
+        return res.status(400).json({ message: "User not found" });
+    }
+
+    const passOk = bcrypt.compareSync(password, userDoc.password);
+    if (!passOk) {
+        return res.status(400).json({ message: "Incorrect password" });
+    }
+
+    res.json({ message: "Login successful" });
 });
 
 app.listen(4000);
