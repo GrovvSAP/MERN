@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors');
 const mongoose = require('mongoose');
+const User = require ('./models/User');
 const app = express();
 
 // Explicitly allow CORS for your frontend
@@ -18,8 +19,10 @@ mongoose.connect(MONGO_URI)
 .then(() => console.log("✅ Connected to MongoDB Atlas"))
 .catch(err => console.error("❌ MongoDB connection error:", err));
 
-app.post('/register',(req,res)=>{
+app.post('/register',async (req,res)=>{
     const {username,password} = req.body;
+    const userDoc = await User.create({username,password});
+    res.json(userDoc);
 
 
     res.json({requestData:{username,password}});
